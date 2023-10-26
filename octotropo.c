@@ -43,6 +43,7 @@ void GetColumn(char board[][7], Player *player);
 
 int main()
 {
+
     system("chcp 65001");
 
     Player player[2];
@@ -260,7 +261,7 @@ void LoadBoard(char board[][7])
     }
 }
 
-void UpdateBoard(char board[][7], Player player)
+void GetInput(char board[][7], Player player)
 {
     int run = 1;
     int attempts = 0;
@@ -297,8 +298,6 @@ void RenderBoard(char board[][7], Player player)
 
 void CheckBoard(char board[][7], Player *player)
 {
-    RenderBoard(board, *player);
-
     // horizontal validation
     for (int i = 1; i < 4; i++)
     {
@@ -310,7 +309,7 @@ void CheckBoard(char board[][7], Player *player)
 
         if (player->score == 3)
         {
-            printf("%s - VENCE PARTIDA movimento horizontal\n", player->name);
+            printf(YELLOW_COLOR "\n PARTIDA CONQUISTADA - ATAQUE NA HORIZONTAL \n" WHITE_COLOR);
             exit(0);
         }
 
@@ -328,7 +327,7 @@ void CheckBoard(char board[][7], Player *player)
 
         if (player->score == 3)
         {
-            printf("%s - VENCE PARTIDA movimento vertical\n", player->name);
+            printf(YELLOW_COLOR "\n PARTIDA CONQUISTADA - ATAQUE NA VERTICAL \n" WHITE_COLOR);
             exit(0);
         }
 
@@ -347,12 +346,12 @@ void CheckBoard(char board[][7], Player *player)
         if (player->piece == board[i][j])
             player->score++;
 
-        j = j + 2;
+        j += 2;
     }
 
     if (player->score == 3)
     {
-        printf("%s - VENCE PARTIDA movimento diagonal A\n", player->name);
+        printf(YELLOW_COLOR "\n PARTIDA CONQUISTADA - ATAQUE DIAGONAL DA ESQUERDA PARA DIREITA \n" WHITE_COLOR);
         exit(0);
     }
 
@@ -373,12 +372,13 @@ void CheckBoard(char board[][7], Player *player)
         {
             player->score++;
         }
-        j = j - 2;
+
+        j -= 2;
     }
 
     if (player->score == 3)
     {
-        printf("%s - VENCE PARTIDA movimento diagonal B\n", player->name);
+        printf(YELLOW_COLOR "\n PARTIDA CONQUISTADA - ATAQUE DIAGONAL DA DIREITA PARA ESQUERDA \n" WHITE_COLOR);
         exit(0);
     }
 
@@ -388,15 +388,12 @@ void CheckBoard(char board[][7], Player *player)
 void StartGame(char board[][7], Player *player)
 {
     int counter = 0;
-    int winner = 0;
 
     while (1)
     {
-        printf("\n");
+        GetInput(board, player[counter]);
 
         RenderBoard(board, *player);
-
-        UpdateBoard(board, player[counter]);
 
         CheckBoard(board, &player[counter]);
 
