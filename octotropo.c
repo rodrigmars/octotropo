@@ -293,8 +293,86 @@ void UpdateBoard(char board[][7], Player player)
     }
 }
 
-void CheckBoard(char board[][7], Player player)
+void CheckBoard(char board[][7], Player *player)
 {
+    int counter_column = 0;
+
+    // horizontal validation
+    for (int line = 0; line < 3; line++)
+    {
+        for (size_t column = 0; column < 3; column++)
+        {
+            if (player->piece == board[line][column])
+            {
+                player->score++;
+            }
+        }
+
+        if (player->score == 3)
+        {
+            printf("%s - VENCE PARTIDA movimento horizontal\n", player->name);
+            exit(0);
+        }
+
+        player->score = 0;
+    }
+
+    // vertical validation
+    for (int column = 0; column < 3; column++)
+    {
+        for (size_t line = 0; line < 3; line++)
+        {
+            if (player->piece == board[line][column])
+            {
+                player->score++;
+            }
+        }
+
+        if (player->score == 3)
+        {
+            printf("%s - VENCE PARTIDA movimento vertical\n", player->name);
+            exit(0);
+        }
+
+        player->score = 0;
+    }
+
+    // movimento diagonal da esquerda para direita
+    // inicializa contador coluna
+    counter_column = 0;
+
+    for (int line = 0; line < 3; line++)
+    {
+
+        if (player->piece == board[line][counter_column++])
+        {
+            player->piece++;
+        }
+    }
+
+    if (player->score == 3)
+    {
+        printf("%s - VENCE PARTIDA movimento diagonal A\n", player->name);
+        exit(0);
+    }
+
+    player->score = 0;
+    counter_column = 3;
+
+    for (int line = 0; line < 3; line++)
+    {
+
+        if (player->piece == board[line][counter_column--])
+        {
+            player->piece++;
+        }
+    }
+
+    if (player->score == 3)
+    {
+        printf("%s - VENCE PARTIDA movimento diagonal B\n", player->name);
+        exit(0);
+    }
 }
 
 void StartGame(char board[][7], Player *player)
@@ -312,7 +390,7 @@ void StartGame(char board[][7], Player *player)
 
         UpdateBoard(board, player[counter]);
 
-        CheckBoard(board, player[counter]);
+        CheckBoard(board, &player[counter]);
 
         counter = (counter > 0) ? 0 : 1;
 
