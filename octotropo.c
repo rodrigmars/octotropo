@@ -44,6 +44,7 @@ void GetColumn(char board[][7], Player *player);
 int main()
 {
     system("chcp 65001");
+
     Player player[2];
 
     player[0].name = "Jogador - 1";
@@ -293,47 +294,42 @@ void UpdateBoard(char board[][7], Player player)
     }
 }
 
-void CheckBoard(char board[][7], Player *player)
+void CheckBoard(char board[][7], Player *player, int *winner)
 {
-    int counter_column = 0;
 
     // horizontal validation
-    for (int line = 0; line < 3; line++)
+    for (int i = 1; i < 4; i++)
     {
-        for (size_t column = 0; column < 3; column++)
+        for (int j = 2; j < 7; j++)
         {
-            if (player->piece == board[line][column])
-            {
+            if (player->piece == board[i][j])
                 player->score++;
-            }
         }
 
         if (player->score == 3)
         {
             printf("%s - VENCE PARTIDA movimento horizontal\n", player->name);
-            system("pause");
-            exit(0);
+            *winner = 1;
+            return;
         }
 
         player->score = 0;
     }
 
     // vertical validation
-    for (int column = 0; column < 3; column++)
+    for (int j = 2; j < 7; j++)
     {
-        for (size_t line = 0; line < 3; line++)
+        for (int i = 1; i < 4; i++)
         {
-            if (player->piece == board[line][column])
-            {
+            if (player->piece == board[i][j])
                 player->score++;
-            }
         }
 
         if (player->score == 3)
         {
             printf("%s - VENCE PARTIDA movimento vertical\n", player->name);
-            system("pause");
-            exit(0);
+            *winner = 1;
+            return;
         }
 
         player->score = 0;
@@ -344,23 +340,24 @@ void CheckBoard(char board[][7], Player *player)
         Movimento diagonal da esquerda para direita
     */
     // inicializa contador coluna
-    counter_column = 0;
+    int j = 2;
 
-    for (int line = 0; line < 3; line++)
+    for (int i = 1; i < 4; i++)
     {
-
-        if (player->piece == board[line][counter_column++])
-        {
+        if (player->piece == board[i][j])
             player->score++;
-        }
+
+        j = j + 2;
     }
 
     if (player->score == 3)
     {
         printf("%s - VENCE PARTIDA movimento diagonal A\n", player->name);
-        system("pause");
-        exit(0);
+        *winner = 1;
+        return;
     }
+
+    player->score = 0;
 
     /*
         Validate Diagonal
@@ -369,27 +366,31 @@ void CheckBoard(char board[][7], Player *player)
 
     // inicializa pontuação e contador coluna
     player->score = 0;
-    counter_column = 3;
+    j = 6;
 
-    for (int line = 0; line < 3; line++)
+    for (int i = 1; i < 4; i++)
     {
-        if (player->piece == board[line][counter_column--])
+        if (player->piece == board[i][j])
         {
             player->score++;
         }
+        j = j - 2;
     }
 
     if (player->score == 3)
     {
         printf("%s - VENCE PARTIDA movimento diagonal B\n", player->name);
-        system("pause");
-        exit(0);
+        *winner = 1;
+        return;
     }
+
+    player->score = 0;
 }
 
 void StartGame(char board[][7], Player *player)
 {
     int counter = 0;
+    int winner = 0;
 
     while (1)
     {
@@ -398,11 +399,14 @@ void StartGame(char board[][7], Player *player)
 
         LoadBoard(board);
 
+        if (winner)
+            break;
+
         printf("\n%s [ %c ]\n", player[counter].name, player[counter].piece);
 
         UpdateBoard(board, player[counter]);
 
-        CheckBoard(board, &player[counter]);
+        CheckBoard(board, &player[counter], &winner);
 
         counter = (counter > 0) ? 0 : 1;
 
