@@ -293,6 +293,10 @@ void UpdateBoard(char board[][7], Player player)
     }
 }
 
+void CheckBoard(char board[][7], Player player)
+{
+}
+
 void StartGame(char board[][7], Player *player)
 {
     int counter = 0;
@@ -307,6 +311,8 @@ void StartGame(char board[][7], Player *player)
         printf("\n%s [ %c ]\n", player[counter].name, player[counter].piece);
 
         UpdateBoard(board, player[counter]);
+
+        CheckBoard(board, player[counter]);
 
         counter = (counter > 0) ? 0 : 1;
 
