@@ -337,7 +337,10 @@ void CheckBoard(char board[][7], Player *player)
         player->score = 0;
     }
 
-    // movimento diagonal da esquerda para direita
+    /*
+        Validate Diagonal
+        Movimento diagonal da esquerda para direita
+    */
     // inicializa contador coluna
     counter_column = 0;
 
@@ -346,7 +349,7 @@ void CheckBoard(char board[][7], Player *player)
 
         if (player->piece == board[line][counter_column++])
         {
-            player->piece++;
+            player->score++;
         }
     }
 
@@ -356,15 +359,20 @@ void CheckBoard(char board[][7], Player *player)
         exit(0);
     }
 
+    /*
+        Validate Diagonal
+        Movimento diagonal da direita para esquerda
+    */
+
+    // inicializa pontuação e contador coluna
     player->score = 0;
     counter_column = 3;
 
     for (int line = 0; line < 3; line++)
     {
-
         if (player->piece == board[line][counter_column--])
         {
-            player->piece++;
+            player->score++;
         }
     }
 
