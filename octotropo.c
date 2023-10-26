@@ -311,6 +311,7 @@ void CheckBoard(char board[][7], Player *player)
         if (player->score == 3)
         {
             printf("%s - VENCE PARTIDA movimento horizontal\n", player->name);
+            system("pause");
             exit(0);
         }
 
@@ -331,6 +332,7 @@ void CheckBoard(char board[][7], Player *player)
         if (player->score == 3)
         {
             printf("%s - VENCE PARTIDA movimento vertical\n", player->name);
+            system("pause");
             exit(0);
         }
 
@@ -356,6 +358,7 @@ void CheckBoard(char board[][7], Player *player)
     if (player->score == 3)
     {
         printf("%s - VENCE PARTIDA movimento diagonal A\n", player->name);
+        system("pause");
         exit(0);
     }
 
@@ -379,6 +382,7 @@ void CheckBoard(char board[][7], Player *player)
     if (player->score == 3)
     {
         printf("%s - VENCE PARTIDA movimento diagonal B\n", player->name);
+        system("pause");
         exit(0);
     }
 }
