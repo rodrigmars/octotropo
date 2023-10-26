@@ -33,7 +33,7 @@ void MaxNumberAttempts(int attempts, int total);
 
 void ChooseStone(char *buffer_option, Player *player);
 
-void LoadBoard(char board[][7]);
+void RenderBoard(char board[][7], Player player);
 
 void StartGame(char board[][7], Player *player);
 
@@ -142,11 +142,7 @@ void GetLine(char board[][7], Player *player)
 
     while (run)
     {
-        system("cls");
-
-        LoadBoard(board);
-
-        printf("\n%s [ %c ]\n", player->name, player->piece);
+        RenderBoard(board, *player);
 
         if (attempts > 0)
         {
@@ -196,11 +192,7 @@ void GetColumn(char board[][7], Player *player)
 
     while (run)
     {
-        system("cls");
-
-        LoadBoard(board);
-
-        printf("\n%s [ %c ]\n", player->name, player->piece);
+        RenderBoard(board, *player);
 
         printf("Linha selecionada: %i\n", player->board.line);
 
@@ -294,8 +286,18 @@ void UpdateBoard(char board[][7], Player player)
     }
 }
 
-void CheckBoard(char board[][7], Player *player, int *winner)
+void RenderBoard(char board[][7], Player player)
 {
+    system("cls");
+
+    LoadBoard(board);
+
+    printf("\n%s [ %c ]\n", player.name, player.piece);
+}
+
+void CheckBoard(char board[][7], Player *player)
+{
+    RenderBoard(board, *player);
 
     // horizontal validation
     for (int i = 1; i < 4; i++)
@@ -309,8 +311,7 @@ void CheckBoard(char board[][7], Player *player, int *winner)
         if (player->score == 3)
         {
             printf("%s - VENCE PARTIDA movimento horizontal\n", player->name);
-            *winner = 1;
-            return;
+            exit(0);
         }
 
         player->score = 0;
@@ -328,8 +329,7 @@ void CheckBoard(char board[][7], Player *player, int *winner)
         if (player->score == 3)
         {
             printf("%s - VENCE PARTIDA movimento vertical\n", player->name);
-            *winner = 1;
-            return;
+            exit(0);
         }
 
         player->score = 0;
@@ -353,8 +353,7 @@ void CheckBoard(char board[][7], Player *player, int *winner)
     if (player->score == 3)
     {
         printf("%s - VENCE PARTIDA movimento diagonal A\n", player->name);
-        *winner = 1;
-        return;
+        exit(0);
     }
 
     player->score = 0;
@@ -380,8 +379,7 @@ void CheckBoard(char board[][7], Player *player, int *winner)
     if (player->score == 3)
     {
         printf("%s - VENCE PARTIDA movimento diagonal B\n", player->name);
-        *winner = 1;
-        return;
+        exit(0);
     }
 
     player->score = 0;
@@ -394,19 +392,13 @@ void StartGame(char board[][7], Player *player)
 
     while (1)
     {
-
         printf("\n");
 
-        LoadBoard(board);
-
-        if (winner)
-            break;
-
-        printf("\n%s [ %c ]\n", player[counter].name, player[counter].piece);
+        RenderBoard(board, *player);
 
         UpdateBoard(board, player[counter]);
 
-        CheckBoard(board, &player[counter], &winner);
+        CheckBoard(board, &player[counter]);
 
         counter = (counter > 0) ? 0 : 1;
 
